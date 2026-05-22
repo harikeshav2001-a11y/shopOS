@@ -9,6 +9,9 @@ import { getOrCreateSettings } from './db/db';
 import Onboarding       from './pages/Onboarding/Onboarding';
 import Dashboard        from './pages/Dashboard';
 import InvoiceList      from './pages/Invoices/InvoiceList';
+import InvoiceNew       from './pages/Invoices/InvoiceNew';
+import InvoiceDetail    from './pages/Invoices/InvoiceDetail';
+import InvoiceEdit      from './pages/Invoices/InvoiceEdit';
 import BillsTracker     from './pages/BillsTracker';
 import Expenses         from './pages/Expenses';
 import CustomerList     from './pages/Customers/CustomerList';
@@ -48,7 +51,10 @@ export default function App() {
               </OnboardingGuard>
             }>
               <Route index element={<Dashboard />} />
-              <Route path="invoices"  element={<InvoiceList />} />
+              <Route path="invoices"          element={<InvoiceList />} />
+              <Route path="invoices/new"      element={<InvoiceNew />} />
+              <Route path="invoices/:id"      element={<InvoiceDetail />} />
+              <Route path="invoices/:id/edit" element={<InvoiceEdit />} />
               <Route path="bills"     element={<BillsTracker />} />
               <Route path="expenses"  element={<Expenses />} />
               <Route path="customers"    element={<CustomerList />} />
