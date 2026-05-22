@@ -1,7 +1,7 @@
 import Dexie, { type Table } from 'dexie';
 import type {
   Settings, Customer, Invoice, InvoiceItem,
-  ColumnTemplate, Expense, Payment,
+  ColumnTemplate, Expense, Payment, Bill,
 } from './types';
 
 export class ShopOSDatabase extends Dexie {
@@ -12,6 +12,7 @@ export class ShopOSDatabase extends Dexie {
   columnTemplates!: Table<ColumnTemplate>;
   expenses!: Table<Expense>;
   payments!: Table<Payment>;
+  bills!: Table<Bill>;
 
   constructor() {
     super('shopOS_db');
@@ -23,6 +24,10 @@ export class ShopOSDatabase extends Dexie {
       columnTemplates: '++id, sortOrder, isActive',
       expenses:        '++id, date, category',
       payments:        '++id, invoiceId, date',
+    });
+    // v2 — adds bills table
+    this.version(2).stores({
+      bills: '++id, dueDate, status, vendorName',
     });
   }
 }

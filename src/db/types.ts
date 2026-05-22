@@ -112,6 +112,21 @@ export interface Payment {
   createdAt: Date;
 }
 
+export type BillStatus = 'pending' | 'paid';
+
+export interface Bill {
+  id?: number;
+  vendorName:  string;
+  description: string;
+  amount:      number;
+  dueDate:     Date;
+  status:      BillStatus;
+  paidDate?:   Date;
+  notes:       string;
+  createdAt:   Date;
+  updatedAt:   Date;
+}
+
 // ── Computed / derived types ──
 
 export interface CustomerWithStats extends Customer {

@@ -1,8 +1,8 @@
 import { cn } from '../../utils/cn';
-import type { InvoiceStatus } from '../../db/types';
+import type { InvoiceStatus, BillStatus } from '../../db/types';
 
 interface BadgeProps {
-  status: InvoiceStatus | 'overdue';
+  status: InvoiceStatus | BillStatus | 'overdue';
   className?: string;
 }
 
@@ -12,6 +12,7 @@ const styles: Record<string, string> = {
   overdue: 'bg-[var(--danger-subtle)] text-[var(--danger)]',
   partial: 'bg-orange-100 text-orange-700 dark:bg-orange-950 dark:text-orange-400',
   paid:    'bg-[var(--success-subtle)] text-[var(--success)]',
+  pending: 'bg-[var(--warning-subtle)] text-[var(--warning)]',
 };
 
 const labels: Record<string, string> = {
@@ -20,6 +21,7 @@ const labels: Record<string, string> = {
   overdue: 'Overdue',
   partial: 'Partial',
   paid:    'Paid',
+  pending: 'Pending',
 };
 
 export function Badge({ status, className }: BadgeProps) {
