@@ -5,14 +5,14 @@
 
 /* ── CSS Variables ── */
 :root {
-  --bg-base:        #F6F8F6;
+  --bg-base:        #F7F8F8;
   --bg-surface:     #FFFFFF;
-  --bg-elevated:    #EEF3EF;
-  --border:         #D8E5DA;
-  --border-strong:  #B8CDB9;
-  --text-primary:   #0D1F13;
-  --text-secondary: #3D5C43;
-  --text-muted:     #7A9980;
+  --bg-elevated:    #F0F2F2;
+  --border:         #E2E6E6;
+  --border-strong:  #C8CECD;
+  --text-primary:   #111514;
+  --text-secondary: #475250;
+  --text-muted:     #8A9896;
 
   --primary:        #2D7255;
   --primary-hover:  #245F46;
@@ -25,25 +25,25 @@
   --warning-subtle: #FEF3C7;
   --danger:         #DC2626;
   --danger-subtle:  #FEE2E2;
-  --neutral:        #5E7A64;
-  --neutral-subtle: #EEF3EF;
+  --neutral:        #64748B;
+  --neutral-subtle: #F0F2F2;
 
   --accent:         #E8A020;
   --accent-subtle:  #FEF3C7;
 
-  --sidebar-bg:     #1B3A2D;
+  --sidebar-bg:     #18191A;
   --sidebar-active: #E8A020;
 }
 
 .dark {
-  --bg-base:        #0E1F16;
-  --bg-surface:     #162A1E;
-  --bg-elevated:    #1F3829;
-  --border:         #2A4A35;
-  --border-strong:  #3D6550;
-  --text-primary:   #E8F5EB;
-  --text-secondary: #A8C9AF;
-  --text-muted:     #5A8063;
+  --bg-base:        #111213;
+  --bg-surface:     #18191A;
+  --bg-elevated:    #1E2020;
+  --border:         #2A2D2D;
+  --border-strong:  #3A3E3E;
+  --text-primary:   #ECEEED;
+  --text-secondary: #A8B2B0;
+  --text-muted:     #5A6462;
 
   --primary:        #3D9E72;
   --primary-hover:  #4DB882;
@@ -56,13 +56,13 @@
   --warning-subtle: #451A03;
   --danger:         #EF4444;
   --danger-subtle:  #450A0A;
-  --neutral:        #5A8063;
-  --neutral-subtle: #1F3829;
+  --neutral:        #64748B;
+  --neutral-subtle: #1E2020;
 
   --accent:         #E8A020;
   --accent-subtle:  #3D2800;
 
-  --sidebar-bg:     #0E1F16;
+  --sidebar-bg:     #0D0E0F;
   --sidebar-active: #E8A020;
 }
 

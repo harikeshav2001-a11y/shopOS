@@ -16,15 +16,20 @@ const navItems = [
 function ShopOSLogo() {
   return (
     <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      {/* Background */}
       <rect width="32" height="32" rx="9" fill="#E8A020" />
-      {/* Abstract S — two arcs forming a flowing S mark */}
-      <path
-        d="M22 10C22 10 10 10 10 14C10 17 22 15 22 19C22 23 10 22 10 22"
-        stroke="#1B3A2D"
-        strokeWidth="3"
-        strokeLinecap="round"
-        fill="none"
-      />
+      {/* Awning / sign bar */}
+      <rect x="5" y="9" width="22" height="5" rx="2" fill="#18191A" />
+      {/* Building body */}
+      <rect x="6" y="14" width="20" height="12" rx="1.5" fill="#18191A" />
+      {/* Door */}
+      <rect x="13" y="19" width="6" height="7" rx="1" fill="#E8A020" />
+      {/* Left window */}
+      <rect x="8" y="16.5" width="4" height="3.5" rx="0.75" fill="#E8A020" opacity="0.5" />
+      {/* Right window */}
+      <rect x="20" y="16.5" width="4" height="3.5" rx="0.75" fill="#E8A020" opacity="0.5" />
+      {/* Small awning notch */}
+      <rect x="5" y="9" width="22" height="2" rx="1" fill="#E8A020" opacity="0.3" />
     </svg>
   );
 }

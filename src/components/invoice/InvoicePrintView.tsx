@@ -1,4 +1,4 @@
-// InvoicePrintView — plain block element rendered by InvoicePreviewModal.
+// InvoicePrintView — clean full-white design.
 // All inline styles with hardcoded hex colours so the PDF is always clean
 // regardless of the app's dark/light mode state.
 
@@ -6,20 +6,19 @@ import type { Invoice, InvoiceItem, Payment, ColumnTemplate, Settings } from '..
 import { formatDate } from '../../utils/dates';
 
 const C = {
-  headerBg:    '#1B3A2D',   // dark forest green
-  headerText:  '#FFFFFF',
-  accent:      '#E8A020',   // amber gold — invoice number, highlights
-  accentLight: '#FEF3C7',   // amber subtle for status backgrounds
-  textPrimary: '#0D1F13',
-  textSecond:  '#3D5C43',
-  textMuted:   '#6B7280',
-  border:      '#D8E5DA',
-  rowAlt:      '#F6F9F6',
+  white:       '#FFFFFF',
+  bg:          '#FFFFFF',
+  accent:      '#E8A020',   // amber — invoice number, balance due
+  accentLight: '#FEF9EE',   // amber subtle
+  brand:       '#1B3A2D',   // dark green — INVOICE heading
+  textPrimary: '#111514',
+  textSecond:  '#475250',
+  textMuted:   '#8A9896',
+  border:      '#E5E9E8',
+  rowAlt:      '#F7F9F8',
   success:     '#16A34A',
   warning:     '#D97706',
   danger:      '#DC2626',
-  white:       '#FFFFFF',
-  headerSub:   '#A8C9B0',   // muted text inside dark header
 };
 
 function fmt(n: number): string {
@@ -54,76 +53,70 @@ export function InvoicePrintView({ id, invoice, items, payments, columns, settin
       id={id}
       style={{
         width:      '794px',
-        background: C.white,
+        background: C.bg,
         fontFamily: "'Google Sans Flex', 'Google Sans', -apple-system, 'Segoe UI', sans-serif",
         fontSize:   '13px',
         color:      C.textPrimary,
         lineHeight: '1.5',
       }}
     >
-      {/* ── Header band ── */}
-      <div style={{ background: C.headerBg, padding: '28px 32px' }}>
-        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
+      {/* ── Header ── */}
+      <div style={{ padding: '36px 40px 24px', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
 
-          {/* Left — shop info */}
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-              {settings.logoBase64 && (
-                <img
-                  src={settings.logoBase64}
-                  alt="logo"
-                  style={{ width: '48px', height: '48px', borderRadius: '8px', objectFit: 'contain', background: C.white, padding: '2px' }}
-                />
-              )}
-              <div>
-                <p style={{ fontSize: '20px', fontWeight: 700, color: C.headerText, margin: 0, letterSpacing: '-0.3px' }}>
-                  {settings.shopName || 'Your Shop'}
-                </p>
-              </div>
-            </div>
-
-            {/* Address block */}
-            <div style={{ fontSize: '12px', color: C.headerSub, display: 'flex', flexDirection: 'column', gap: '3px' }}>
-              {settings.shopAddress && (
-                <span style={{ maxWidth: '260px', lineHeight: '1.4' }}>{settings.shopAddress}</span>
-              )}
-              {settings.shopPhone && <span>Ph: {settings.shopPhone}</span>}
-              {settings.shopEmail && <span>Email: {settings.shopEmail}</span>}
-              {settings.gstNumber && (
-                <span style={{ fontWeight: 600, color: C.accent, fontFamily: 'monospace', marginTop: '4px' }}>
-                  GSTIN: {settings.gstNumber}
-                </span>
-              )}
-            </div>
-          </div>
-
-          {/* Right — invoice label + number + status */}
-          <div style={{ textAlign: 'right' }}>
-            <p style={{ fontSize: '32px', fontWeight: 800, color: C.headerText, margin: '0 0 4px', letterSpacing: '-1px' }}>
-              INVOICE
+        {/* Left — shop identity */}
+        <div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '10px' }}>
+            {settings.logoBase64 && (
+              <img
+                src={settings.logoBase64}
+                alt="logo"
+                style={{ width: '52px', height: '52px', borderRadius: '8px', objectFit: 'contain' }}
+              />
+            )}
+            <p style={{ fontSize: '22px', fontWeight: 700, color: C.brand, margin: 0, letterSpacing: '-0.3px' }}>
+              {settings.shopName || 'Your Shop'}
             </p>
-            <p style={{ fontSize: '16px', fontWeight: 700, color: C.accent, margin: '0 0 10px', fontFamily: 'monospace' }}>
-              #{invoice.invoiceNumber}
-            </p>
-            <span style={{
-              display: 'inline-block', padding: '4px 12px', borderRadius: '6px',
-              fontSize: '11px', fontWeight: 700, letterSpacing: '0.8px',
-              background: `${displayColor}22`, color: displayColor,
-              border: `1.5px solid ${displayColor}55`,
-            }}>
-              {displayStatus}
-            </span>
           </div>
+          <div style={{ fontSize: '12px', color: C.textMuted, display: 'flex', flexDirection: 'column', gap: '3px' }}>
+            {settings.shopAddress && (
+              <span style={{ maxWidth: '240px', lineHeight: '1.45' }}>{settings.shopAddress}</span>
+            )}
+            {settings.shopPhone && <span>{settings.shopPhone}</span>}
+            {settings.shopEmail && <span>{settings.shopEmail}</span>}
+            {settings.gstNumber && (
+              <span style={{ fontFamily: 'monospace', fontWeight: 600, color: C.textSecond, marginTop: '3px' }}>
+                GSTIN: {settings.gstNumber}
+              </span>
+            )}
+          </div>
+        </div>
+
+        {/* Right — invoice label */}
+        <div style={{ textAlign: 'right' }}>
+          <p style={{ fontSize: '36px', fontWeight: 800, color: C.brand, margin: '0 0 4px', letterSpacing: '-1.5px' }}>
+            INVOICE
+          </p>
+          <p style={{ fontSize: '15px', fontWeight: 700, color: C.accent, margin: '0 0 10px', fontFamily: 'monospace' }}>
+            #{invoice.invoiceNumber}
+          </p>
+          <span style={{
+            display: 'inline-block', padding: '4px 12px', borderRadius: '6px',
+            fontSize: '11px', fontWeight: 700, letterSpacing: '0.8px',
+            background: `${displayColor}18`, color: displayColor,
+            border: `1.5px solid ${displayColor}44`,
+          }}>
+            {displayStatus}
+          </span>
         </div>
       </div>
 
-      {/* ── Amber accent line ── */}
-      <div style={{ height: '4px', background: C.accent }} />
+      {/* ── Amber rule ── */}
+      <div style={{ height: '3px', background: C.accent, margin: '0 40px' }} />
 
-      {/* ── Date + Bill-to row ── */}
+      {/* ── Invoice details + Bill to ── */}
       <div style={{
         display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px',
-        padding: '24px 32px', borderBottom: `1px solid ${C.border}`,
+        padding: '24px 40px', borderBottom: `1px solid ${C.border}`,
       }}>
         <div>
           <p style={{ fontSize: '10px', fontWeight: 700, color: C.textMuted, textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '10px' }}>
@@ -133,11 +126,11 @@ export function InvoicePrintView({ id, invoice, items, payments, columns, settin
             <tbody>
               <tr>
                 <td style={{ color: C.textMuted, paddingRight: '16px', paddingBottom: '5px' }}>Invoice Date</td>
-                <td style={{ fontWeight: 600, paddingBottom: '5px', color: C.textPrimary }}>{formatDate(invoice.date)}</td>
+                <td style={{ fontWeight: 600, paddingBottom: '5px' }}>{formatDate(invoice.date)}</td>
               </tr>
               <tr>
-                <td style={{ color: C.textMuted, paddingRight: '16px', paddingBottom: '5px' }}>Due Date</td>
-                <td style={{ fontWeight: 600, paddingBottom: '5px', color: C.textPrimary }}>{formatDate(invoice.dueDate)}</td>
+                <td style={{ color: C.textMuted, paddingRight: '16px' }}>Due Date</td>
+                <td style={{ fontWeight: 600 }}>{formatDate(invoice.dueDate)}</td>
               </tr>
             </tbody>
           </table>
@@ -147,11 +140,11 @@ export function InvoicePrintView({ id, invoice, items, payments, columns, settin
           <p style={{ fontSize: '10px', fontWeight: 700, color: C.textMuted, textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '10px' }}>
             Bill To
           </p>
-          <p style={{ fontWeight: 700, fontSize: '14px', margin: '0 0 4px', color: C.textPrimary }}>{invoice.customerSnapshot.name}</p>
+          <p style={{ fontWeight: 700, fontSize: '14px', margin: '0 0 4px' }}>{invoice.customerSnapshot.name}</p>
           {invoice.customerSnapshot.phone   && <p style={{ color: C.textSecond, margin: '0 0 2px', fontSize: '12px' }}>{invoice.customerSnapshot.phone}</p>}
           {invoice.customerSnapshot.address && <p style={{ color: C.textSecond, margin: '0 0 2px', fontSize: '12px' }}>{invoice.customerSnapshot.address}</p>}
           {invoice.customerSnapshot.gstNumber && (
-            <p style={{ color: C.textMuted, fontSize: '11px', fontFamily: 'monospace', margin: '6px 0 0', fontWeight: 600 }}>
+            <p style={{ color: C.textMuted, fontSize: '11px', fontFamily: 'monospace', margin: '5px 0 0', fontWeight: 600 }}>
               GSTIN: {invoice.customerSnapshot.gstNumber}
             </p>
           )}
@@ -159,7 +152,7 @@ export function InvoicePrintView({ id, invoice, items, payments, columns, settin
       </div>
 
       {/* ── Line items ── */}
-      <div style={{ padding: '24px 32px 0' }}>
+      <div style={{ padding: '24px 40px 0' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px' }}>
           <thead>
             <tr style={{ background: C.rowAlt, borderBottom: `2px solid ${C.border}` }}>
@@ -179,13 +172,13 @@ export function InvoicePrintView({ id, invoice, items, payments, columns, settin
           <tbody>
             {items.map((item, idx) => (
               <tr key={idx} style={{ background: idx % 2 === 1 ? C.rowAlt : C.white, borderBottom: `1px solid ${C.border}` }}>
-                <td style={{ padding: '9px 10px 9px 0', verticalAlign: 'top', color: C.textPrimary }}>{item.description || '—'}</td>
+                <td style={{ padding: '9px 10px 9px 0', verticalAlign: 'top' }}>{item.description || '—'}</td>
                 {columns.map(col => (
                   <td key={col.key} style={{ padding: '9px 0 9px 12px', textAlign: 'right', verticalAlign: 'top', color: C.textSecond }}>
                     {item.customFields[col.key] !== undefined ? String(item.customFields[col.key]) : '—'}
                   </td>
                 ))}
-                <td style={{ padding: '9px 0 9px 12px', textAlign: 'right', fontWeight: 600, fontVariantNumeric: 'tabular-nums', verticalAlign: 'top', color: C.textPrimary }}>
+                <td style={{ padding: '9px 0 9px 12px', textAlign: 'right', fontWeight: 600, fontVariantNumeric: 'tabular-nums', verticalAlign: 'top' }}>
                   {fmt(item.amount)}
                 </td>
               </tr>
@@ -195,12 +188,12 @@ export function InvoicePrintView({ id, invoice, items, payments, columns, settin
       </div>
 
       {/* ── Totals ── */}
-      <div style={{ padding: '16px 32px 24px', display: 'flex', justifyContent: 'flex-end' }}>
+      <div style={{ padding: '16px 40px 28px', display: 'flex', justifyContent: 'flex-end' }}>
         <table style={{ borderCollapse: 'collapse', fontSize: '13px', minWidth: '260px' }}>
           <tbody>
             <tr>
               <td style={{ padding: '4px 24px 4px 0', color: C.textMuted }}>Subtotal</td>
-              <td style={{ padding: '4px 0', textAlign: 'right', fontVariantNumeric: 'tabular-nums', color: C.textPrimary }}>{fmt(invoice.subtotal)}</td>
+              <td style={{ padding: '4px 0', textAlign: 'right', fontVariantNumeric: 'tabular-nums' }}>{fmt(invoice.subtotal)}</td>
             </tr>
             {invoice.gstEnabled && invoice.gstAmount > 0 && invoice.gstType === 'CGST_SGST' && <>
               <tr>
@@ -219,8 +212,8 @@ export function InvoicePrintView({ id, invoice, items, payments, columns, settin
               </tr>
             }
             <tr style={{ borderTop: `2px solid ${C.border}` }}>
-              <td style={{ padding: '10px 24px 4px 0', fontWeight: 700, fontSize: '15px', color: C.textPrimary }}>Total</td>
-              <td style={{ padding: '10px 0 4px', textAlign: 'right', fontWeight: 700, fontSize: '15px', fontVariantNumeric: 'tabular-nums', color: C.textPrimary }}>{fmt(invoice.total)}</td>
+              <td style={{ padding: '10px 24px 4px 0', fontWeight: 700, fontSize: '15px' }}>Total</td>
+              <td style={{ padding: '10px 0 4px', textAlign: 'right', fontWeight: 700, fontSize: '15px', fontVariantNumeric: 'tabular-nums' }}>{fmt(invoice.total)}</td>
             </tr>
             {invoice.paidAmount > 0 && (
               <tr>
@@ -229,7 +222,7 @@ export function InvoicePrintView({ id, invoice, items, payments, columns, settin
               </tr>
             )}
             {balance > 0 && (
-              <tr style={{ background: `${C.accent}15`, borderTop: `1px solid ${C.border}` }}>
+              <tr style={{ background: C.accentLight, borderTop: `1px solid ${C.border}` }}>
                 <td style={{ padding: '8px 24px 8px 8px', fontWeight: 700, color: C.accent }}>Balance Due</td>
                 <td style={{ padding: '8px 8px 8px 0', textAlign: 'right', fontWeight: 700, color: C.accent, fontVariantNumeric: 'tabular-nums' }}>{fmt(balance)}</td>
               </tr>
@@ -240,7 +233,7 @@ export function InvoicePrintView({ id, invoice, items, payments, columns, settin
 
       {/* ── Notes ── */}
       {invoice.notes && (
-        <div style={{ padding: '0 32px 20px', borderTop: `1px solid ${C.border}`, paddingTop: '20px' }}>
+        <div style={{ padding: '0 40px 20px', borderTop: `1px solid ${C.border}`, paddingTop: '20px' }}>
           <p style={{ fontSize: '10px', fontWeight: 700, color: C.textMuted, textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '8px' }}>Notes</p>
           <p style={{ color: C.textSecond, whiteSpace: 'pre-wrap', margin: 0, fontSize: '12px' }}>{invoice.notes}</p>
         </div>
@@ -248,7 +241,7 @@ export function InvoicePrintView({ id, invoice, items, payments, columns, settin
 
       {/* ── Payment history ── */}
       {payments.length > 0 && (
-        <div style={{ padding: '0 32px 24px', borderTop: `1px solid ${C.border}`, paddingTop: '20px' }}>
+        <div style={{ padding: '0 40px 24px', borderTop: `1px solid ${C.border}`, paddingTop: '20px' }}>
           <p style={{ fontSize: '10px', fontWeight: 700, color: C.textMuted, textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '8px' }}>Payment History</p>
           {payments.map((p, i) => (
             <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '5px 0', borderBottom: i < payments.length - 1 ? `1px solid ${C.border}` : 'none' }}>
@@ -260,9 +253,14 @@ export function InvoicePrintView({ id, invoice, items, payments, columns, settin
       )}
 
       {/* ── Footer ── */}
-      <div style={{ background: C.headerBg, padding: '16px 32px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <span style={{ fontSize: '12px', color: C.headerSub }}>Thank you for your business!</span>
-        <div style={{ display: 'flex', gap: '16px', fontSize: '12px', color: C.headerSub }}>
+      <div style={{
+        padding: '14px 40px',
+        borderTop: `2px solid ${C.accent}`,
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        marginTop: '8px',
+      }}>
+        <span style={{ fontSize: '12px', color: C.textMuted }}>Thank you for your business!</span>
+        <div style={{ display: 'flex', gap: '16px', fontSize: '12px', color: C.textMuted }}>
           {settings.shopPhone && <span>{settings.shopPhone}</span>}
           {settings.shopEmail && <span>{settings.shopEmail}</span>}
         </div>
