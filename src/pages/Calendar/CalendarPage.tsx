@@ -221,11 +221,30 @@ export default function CalendarPage() {
   // ── Render ────────────────────────────────────────────────────────────────
   return (
     <>
-      <div className="flex flex-col lg:flex-row gap-4 items-start">
+      <div className="p-4 md:p-6 max-w-6xl mx-auto space-y-5">
+
+        {/* ── Page header ── */}
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-lg font-semibold text-[var(--text-primary)]">Calendar</h2>
+            <p className="text-sm text-[var(--text-secondary)] mt-0.5">
+              {format(selectedDay, 'EEEE, d MMMM yyyy')}
+              {isToday(selectedDay) && (
+                <span className="ml-2 text-xs font-semibold" style={{ color: 'var(--primary)' }}>Today</span>
+              )}
+            </p>
+          </div>
+          <Button size="sm" icon={<Plus className="w-3.5 h-3.5" />} onClick={openAdd}>
+            Add event
+          </Button>
+        </div>
+
+        {/* ── Two-column layout ── */}
+        <div className="flex flex-col lg:flex-row gap-4 items-start">
 
         {/* ── Calendar card ── */}
-        <div className="w-full lg:w-auto lg:shrink-0 rounded-xl border border-[var(--border)] bg-[var(--bg-surface)] p-4">
-          <div className="w-full" style={{ minWidth: 280, maxWidth: 320 }}>
+        <div className="w-full lg:w-[320px] shrink-0 rounded-xl border border-[var(--border)] bg-[var(--bg-surface)] p-4">
+          <div className="w-full">
 
             {/* Month navigation */}
             <div className="flex items-center justify-between mb-3">
@@ -291,20 +310,10 @@ export default function CalendarPage() {
         {/* ── Day detail card ── */}
         <div className="flex-1 min-w-0 rounded-xl border border-[var(--border)] bg-[var(--bg-surface)] p-4">
 
-          {/* Header */}
-          <div className="flex items-start justify-between gap-2 mb-4">
-            <div>
-              <p className="text-sm font-semibold text-[var(--text-primary)]">
-                {format(selectedDay, 'EEEE, d MMMM yyyy')}
-              </p>
-              {isToday(selectedDay) && (
-                <p className="text-xs font-medium mt-0.5" style={{ color: 'var(--primary)' }}>Today</p>
-              )}
-            </div>
-            <Button size="sm" icon={<Plus className="w-3.5 h-3.5" />} onClick={openAdd}>
-              Add event
-            </Button>
-          </div>
+          {/* Section label */}
+          <p className="text-xs font-semibold uppercase tracking-wide text-[var(--text-muted)] mb-3">
+            What's on this day
+          </p>
 
           {/* Empty state */}
           {!hasAnything && (
@@ -451,7 +460,8 @@ export default function CalendarPage() {
             </section>
           )}
         </div>
-      </div>
+        </div>{/* end two-column */}
+      </div>{/* end page wrapper */}
 
       <EventModal
         open={modalOpen}
