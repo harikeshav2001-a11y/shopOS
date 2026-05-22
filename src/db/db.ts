@@ -29,6 +29,8 @@ export class ShopOSDatabase extends Dexie {
     this.version(2).stores({
       bills: '++id, dueDate, status, vendorName',
     });
+    // v3 — adds email backup fields to settings (no schema change, just defaults)
+    this.version(3).stores({});
   }
 }
 
@@ -53,6 +55,10 @@ export const DEFAULT_SETTINGS: Omit<Settings, 'id'> = {
   onboardingComplete: false,
   createdAt: new Date(),
   updatedAt: new Date(),
+  backupEmail:       '',
+  emailjsServiceId:  '',
+  emailjsTemplateId: '',
+  emailjsPublicKey:  '',
 };
 
 export async function getOrCreateSettings(): Promise<Settings> {

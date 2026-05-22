@@ -30,6 +30,12 @@ export interface Settings {
   onboardingComplete: boolean;
   createdAt: Date;
   updatedAt: Date;
+  // Email backup
+  backupEmail:        string;
+  emailjsServiceId:   string;
+  emailjsTemplateId:  string;
+  emailjsPublicKey:   string;
+  lastBackupDate?:    Date;
 }
 
 export interface Customer {

@@ -1,8 +1,8 @@
 import { db } from '../db/db';
 import { format } from 'date-fns';
 
-export async function exportBackup(): Promise<void> {
-  const [settings, customers, invoices, invoiceItems, columnTemplates, expenses, payments] =
+export async function getBackupData() {
+  const [settings, customers, invoices, invoiceItems, columnTemplates, expenses, payments, bills] =
     await Promise.all([
       db.settings.toArray(),
       db.customers.toArray(),
@@ -11,13 +11,18 @@ export async function exportBackup(): Promise<void> {
       db.columnTemplates.toArray(),
       db.expenses.toArray(),
       db.payments.toArray(),
+      db.bills.toArray(),
     ]);
 
-  const data = {
+  return {
     version: 1,
     exportedAt: new Date().toISOString(),
-    settings, customers, invoices, invoiceItems, columnTemplates, expenses, payments,
+    settings, customers, invoices, invoiceItems, columnTemplates, expenses, payments, bills,
   };
+}
+
+export async function exportBackup(): Promise<void> {
+  const data = await getBackupData();
 
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
