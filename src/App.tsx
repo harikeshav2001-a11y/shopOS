@@ -1,9 +1,10 @@
+import { useState, useEffect } from 'react';
 import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { ThemeProvider } from './store/theme';
 import { ToastProvider } from './components/ui/Toast';
 import { AppShell } from './components/layout/AppShell';
-import { getOrCreateSettings } from './db/db';
+import { db, getOrCreateSettings } from './db/db';
 
 // Pages
 import Onboarding       from './pages/Onboarding/Onboarding';
@@ -25,13 +26,23 @@ import Appearance       from './pages/Settings/Appearance';
 import Data             from './pages/Settings/Data';
 
 // ── Guard: redirect to onboarding if setup not complete ──
+// getOrCreateSettings() does a conditional write, so we run it once in a
+// useEffect (outside the read-only useLiveQuery context) to ensure the row
+// exists, then watch it with a plain read query.
 function OnboardingGuard({ children }: { children: React.ReactNode }) {
-  const settings = useLiveQuery(() => getOrCreateSettings(), []);
+  const [seeded, setSeeded] = useState(false);
 
-  // Still loading
-  if (settings === undefined) return null;
+  useEffect(() => {
+    getOrCreateSettings().then(() => setSeeded(true));
+  }, []);
 
-  if (!settings.onboardingComplete) return <Navigate to="/onboarding" replace />;
+  const settings = useLiveQuery(
+    () => seeded ? db.settings.get(1) : undefined,
+    [seeded]
+  );
+
+  if (!seeded || settings === undefined) return null;
+  if (!settings!.onboardingComplete) return <Navigate to="/onboarding" replace />;
   return <>{children}</>;
 }
 
