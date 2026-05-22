@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Pencil, Trash2, IndianRupee, Download } from 'lucide-react';
+import { ArrowLeft, Pencil, Trash2, IndianRupee, Eye } from 'lucide-react';
 import { format } from 'date-fns';
 import { useInvoice, recordPayment, deleteInvoice } from '../../hooks/useInvoices';
 import { useColumns } from '../../hooks/useColumns';
 import { useSettingsValue } from '../../hooks/useSettings';
-import { InvoicePrintView } from '../../components/invoice/InvoicePrintView';
+import { InvoicePreviewModal } from '../../components/invoice/InvoicePreviewModal';
 import { LineItemsTable } from '../../components/invoice/LineItemsTable';
 import { TotalsPanel } from '../../components/invoice/TotalsPanel';
 import { Button } from '../../components/ui/Button';
@@ -27,15 +27,17 @@ export default function InvoiceDetail() {
 
   const data = useInvoice(Number(id));
 
-  const [showPayment, setShowPayment] = useState(false);
-  const [payAmt,      setPayAmt]      = useState('');
-  const [payDate,     setPayDate]     = useState(format(new Date(), 'yyyy-MM-dd'));
-  const [payNote,     setPayNote]     = useState('');
-  const [paying,      setPaying]      = useState(false);
+  const [showPreview,  setShowPreview]  = useState(false);
+  const [generating,   setGenerating]   = useState(false);
 
-  const [showDelete,  setShowDelete]  = useState(false);
-  const [deleting,    setDeleting]    = useState(false);
-  const [generating,  setGenerating]  = useState(false);
+  const [showPayment,  setShowPayment]  = useState(false);
+  const [payAmt,       setPayAmt]       = useState('');
+  const [payDate,      setPayDate]      = useState(format(new Date(), 'yyyy-MM-dd'));
+  const [payNote,      setPayNote]      = useState('');
+  const [paying,       setPaying]       = useState(false);
+
+  const [showDelete,   setShowDelete]   = useState(false);
+  const [deleting,     setDeleting]     = useState(false);
 
   if (data === undefined) return <PageSpinner />;
   if (!data) return <div className="p-6 text-[var(--text-muted)]">Invoice not found.</div>;
@@ -78,13 +80,9 @@ export default function InvoiceDetail() {
   }
 
   async function handleDownloadPDF() {
-    if (!settings) { toast('error', 'Settings not loaded yet'); return; }
     setGenerating(true);
     try {
-      await downloadInvoicePDF(
-        `invoice-print-${invoice.id}`,
-        `${invoice.invoiceNumber}.pdf`
-      );
+      await downloadInvoicePDF(`invoice-print-${invoice.id}`, `${invoice.invoiceNumber}.pdf`);
       toast('success', 'PDF downloaded');
     } catch (e: unknown) {
       toast('error', e instanceof Error ? e.message : 'Could not generate PDF');
@@ -95,18 +93,6 @@ export default function InvoiceDetail() {
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
-      {/* Hidden print view — captured by html2pdf */}
-      {settings && (
-        <InvoicePrintView
-          id={`invoice-print-${invoice.id}`}
-          invoice={invoice}
-          items={items}
-          payments={payments}
-          columns={columns}
-          settings={settings}
-        />
-      )}
-
       {/* Back */}
       <button
         onClick={() => navigate('/invoices')}
@@ -131,15 +117,17 @@ export default function InvoiceDetail() {
         </div>
 
         <div className="flex gap-2 flex-wrap justify-end">
-          <Button
-            variant="secondary"
-            size="sm"
-            icon={<Download className="w-3.5 h-3.5" />}
-            loading={generating}
-            onClick={handleDownloadPDF}
-          >
-            Download PDF
-          </Button>
+          {/* View / Download PDF */}
+          {settings && (
+            <Button
+              variant="secondary"
+              size="sm"
+              icon={<Eye className="w-3.5 h-3.5" />}
+              onClick={() => setShowPreview(true)}
+            >
+              View PDF
+            </Button>
+          )}
           {invoice.status !== 'paid' && (
             <Button
               size="sm"
@@ -252,10 +240,7 @@ export default function InvoiceDetail() {
             </h2>
             <div className="space-y-2">
               {payments.map(p => (
-                <div
-                  key={p.id}
-                  className="flex items-center justify-between py-2 border-b border-[var(--border)] last:border-0"
-                >
+                <div key={p.id} className="flex items-center justify-between py-2 border-b border-[var(--border)] last:border-0">
                   <div>
                     <p className="text-sm text-[var(--text-primary)]">{formatDate(p.date)}</p>
                     {p.note && <p className="text-xs text-[var(--text-muted)] mt-0.5">{p.note}</p>}
@@ -270,38 +255,29 @@ export default function InvoiceDetail() {
         )}
       </div>
 
+      {/* ── PDF Preview Modal ── */}
+      {settings && (
+        <InvoicePreviewModal
+          open={showPreview}
+          onClose={() => setShowPreview(false)}
+          onDownload={handleDownloadPDF}
+          generating={generating}
+          invoice={invoice}
+          items={items}
+          payments={payments}
+          columns={columns}
+          settings={settings}
+        />
+      )}
+
       {/* ── Record Payment Modal ── */}
-      <Modal
-        open={showPayment}
-        onClose={() => setShowPayment(false)}
-        title="Record Payment"
-        description={`Balance due: ${formatCurrency(balance)}`}
-      >
+      <Modal open={showPayment} onClose={() => setShowPayment(false)} title="Record Payment" description={`Balance due: ${formatCurrency(balance)}`}>
         <div className="space-y-3">
-          <Input
-            label="Amount (₹)"
-            type="number"
-            min="0"
-            step="0.01"
-            value={payAmt}
-            onChange={e => setPayAmt(e.target.value)}
-            placeholder="0.00"
-            autoFocus
-          />
-          <Input
-            label="Payment Date"
-            type="date"
-            value={payDate}
-            onChange={e => setPayDate(e.target.value)}
-          />
+          <Input label="Amount (₹)" type="number" min="0" step="0.01" value={payAmt} onChange={e => setPayAmt(e.target.value)} placeholder="0.00" autoFocus />
+          <Input label="Payment Date" type="date" value={payDate} onChange={e => setPayDate(e.target.value)} />
           <div>
             <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">Note (optional)</label>
-            <input
-              value={payNote}
-              onChange={e => setPayNote(e.target.value)}
-              placeholder="e.g. Cash, UPI, Cheque…"
-              className="w-full px-3 py-2 rounded-lg border border-[var(--border)] bg-[var(--bg-surface)] text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:border-transparent"
-            />
+            <input value={payNote} onChange={e => setPayNote(e.target.value)} placeholder="e.g. Cash, UPI, Cheque…" className="w-full px-3 py-2 rounded-lg border border-[var(--border)] bg-[var(--bg-surface)] text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:border-transparent" />
           </div>
           <div className="flex justify-end gap-2 pt-1">
             <Button variant="ghost" onClick={() => setShowPayment(false)}>Cancel</Button>
@@ -311,22 +287,10 @@ export default function InvoiceDetail() {
       </Modal>
 
       {/* ── Delete Confirm Modal ── */}
-      <Modal
-        open={showDelete}
-        onClose={() => setShowDelete(false)}
-        title="Delete Invoice"
-        description={`Delete ${invoice.invoiceNumber}? This cannot be undone.`}
-      >
+      <Modal open={showDelete} onClose={() => setShowDelete(false)} title="Delete Invoice" description={`Delete ${invoice.invoiceNumber}? This cannot be undone.`}>
         <div className="flex justify-end gap-2">
           <Button variant="ghost" onClick={() => setShowDelete(false)}>Cancel</Button>
-          <Button
-            variant="danger"
-            loading={deleting}
-            icon={<Trash2 className="w-4 h-4" />}
-            onClick={handleDelete}
-          >
-            Delete
-          </Button>
+          <Button variant="danger" loading={deleting} icon={<Trash2 className="w-4 h-4" />} onClick={handleDelete}>Delete</Button>
         </div>
       </Modal>
     </div>
