@@ -43,7 +43,7 @@ export default function InvoiceList() {
   });
 
   return (
-    <div className="p-6 max-w-5xl mx-auto">
+    <div className="p-4 md:p-6 max-w-5xl mx-auto">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
@@ -53,7 +53,8 @@ export default function InvoiceList() {
           </p>
         </div>
         <Button icon={<Plus className="w-4 h-4" />} onClick={() => navigate('/invoices/new')}>
-          New Invoice
+          <span className="hidden sm:inline">New Invoice</span>
+          <span className="sm:hidden">New</span>
         </Button>
       </div>
 
@@ -93,7 +94,7 @@ export default function InvoiceList() {
             <input
               value={search}
               onChange={e => setSearch(e.target.value)}
-              placeholder="Search by invoice number or customer name…"
+              placeholder="Search by invoice number or customer…"
               className="w-full pl-9 pr-4 py-2 rounded-lg border border-[var(--border)] bg-[var(--bg-surface)] text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:border-transparent"
             />
           </div>
@@ -105,65 +106,92 @@ export default function InvoiceList() {
             </div>
           )}
 
-          {/* Table */}
           {filtered.length > 0 && (
             <div className="rounded-xl border border-[var(--border)] overflow-hidden">
-              <div className="grid grid-cols-12 gap-3 px-4 py-2.5 bg-[var(--bg-elevated)] border-b border-[var(--border)]">
-                <span className="col-span-3 text-xs font-semibold text-[var(--text-secondary)] uppercase tracking-wide">Invoice</span>
-                <span className="col-span-3 text-xs font-semibold text-[var(--text-secondary)] uppercase tracking-wide">Customer</span>
-                <span className="col-span-2 text-xs font-semibold text-[var(--text-secondary)] uppercase tracking-wide">Due Date</span>
-                <span className="col-span-2 text-xs font-semibold text-[var(--text-secondary)] uppercase tracking-wide text-right">Amount</span>
-                <span className="col-span-2 text-xs font-semibold text-[var(--text-secondary)] uppercase tracking-wide text-right">Status</span>
+
+              {/* ── Desktop table ── */}
+              <div className="hidden md:block">
+                <div className="grid grid-cols-12 gap-3 px-4 py-2.5 bg-[var(--bg-elevated)] border-b border-[var(--border)]">
+                  <span className="col-span-3 text-xs font-semibold text-[var(--text-secondary)] uppercase tracking-wide">Invoice</span>
+                  <span className="col-span-3 text-xs font-semibold text-[var(--text-secondary)] uppercase tracking-wide">Customer</span>
+                  <span className="col-span-2 text-xs font-semibold text-[var(--text-secondary)] uppercase tracking-wide">Due Date</span>
+                  <span className="col-span-2 text-xs font-semibold text-[var(--text-secondary)] uppercase tracking-wide text-right">Amount</span>
+                  <span className="col-span-2 text-xs font-semibold text-[var(--text-secondary)] uppercase tracking-wide text-right">Status</span>
+                </div>
+
+                {filtered.map((inv, i) => {
+                  const overdue = isOverdue(inv.dueDate, inv.status);
+                  const status  = overdue ? 'overdue' : inv.status;
+                  return (
+                    <div
+                      key={inv.id}
+                      onClick={() => navigate(`/invoices/${inv.id}`)}
+                      className={cn(
+                        'grid grid-cols-12 gap-3 px-4 py-3 items-center cursor-pointer',
+                        'hover:bg-[var(--bg-elevated)] transition-colors',
+                        i < filtered.length - 1 && 'border-b border-[var(--border)]',
+                        overdue && 'border-l-2 border-l-[var(--danger)]'
+                      )}
+                    >
+                      <div className="col-span-3">
+                        <p className="text-sm font-medium text-[var(--text-primary)]">{inv.invoiceNumber}</p>
+                        <p className="text-xs text-[var(--text-muted)]">{formatDate(inv.date)}</p>
+                      </div>
+                      <div className="col-span-3 min-w-0">
+                        <p className="text-sm text-[var(--text-primary)] truncate">{inv.customerSnapshot.name}</p>
+                        {inv.customerSnapshot.phone && (
+                          <p className="text-xs text-[var(--text-muted)]">{inv.customerSnapshot.phone}</p>
+                        )}
+                      </div>
+                      <div className="col-span-2 text-sm text-[var(--text-secondary)]">
+                        {formatDate(inv.dueDate)}
+                      </div>
+                      <div className="col-span-2 text-right">
+                        <p className="text-sm tabular-nums text-[var(--text-primary)]">{formatCurrency(inv.total)}</p>
+                        {inv.paidAmount > 0 && inv.paidAmount < inv.total && (
+                          <p className="text-xs text-[var(--text-muted)]">Pd {formatCurrency(inv.paidAmount)}</p>
+                        )}
+                      </div>
+                      <div className="col-span-2 flex justify-end">
+                        <Badge status={status} />
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
 
-              {filtered.map((inv, i) => {
-                const overdue = isOverdue(inv.dueDate, inv.status);
-                const status  = overdue ? 'overdue' : inv.status;
-
-                return (
-                  <div
-                    key={inv.id}
-                    onClick={() => navigate(`/invoices/${inv.id}`)}
-                    className={cn(
-                      'grid grid-cols-12 gap-3 px-4 py-3 items-center cursor-pointer',
-                      'hover:bg-[var(--bg-elevated)] transition-colors',
-                      i < filtered.length - 1 && 'border-b border-[var(--border)]',
-                      overdue && 'border-l-2 border-l-[var(--danger)]'
-                    )}
-                  >
-                    <div className="col-span-3">
-                      <p className="text-sm font-medium text-[var(--text-primary)]">{inv.invoiceNumber}</p>
-                      <p className="text-xs text-[var(--text-muted)]">{formatDate(inv.date)}</p>
-                    </div>
-
-                    <div className="col-span-3 min-w-0">
-                      <p className="text-sm text-[var(--text-primary)] truncate">{inv.customerSnapshot.name}</p>
-                      {inv.customerSnapshot.phone && (
-                        <p className="text-xs text-[var(--text-muted)]">{inv.customerSnapshot.phone}</p>
+              {/* ── Mobile cards ── */}
+              <div className="md:hidden divide-y divide-[var(--border)]">
+                {filtered.map(inv => {
+                  const overdue = isOverdue(inv.dueDate, inv.status);
+                  const status  = overdue ? 'overdue' : inv.status;
+                  return (
+                    <div
+                      key={inv.id}
+                      onClick={() => navigate(`/invoices/${inv.id}`)}
+                      className={cn(
+                        'flex items-center justify-between px-4 py-3.5 cursor-pointer',
+                        'hover:bg-[var(--bg-elevated)] transition-colors',
+                        overdue && 'border-l-2 border-l-[var(--danger)]'
                       )}
-                    </div>
-
-                    <div className="col-span-2 text-sm text-[var(--text-secondary)]">
-                      {formatDate(inv.dueDate)}
-                    </div>
-
-                    <div className="col-span-2 text-right">
-                      <p className="text-sm tabular-nums text-[var(--text-primary)]">
-                        {formatCurrency(inv.total)}
-                      </p>
-                      {inv.paidAmount > 0 && inv.paidAmount < inv.total && (
-                        <p className="text-xs text-[var(--text-muted)]">
-                          Pd {formatCurrency(inv.paidAmount)}
+                    >
+                      <div className="min-w-0 mr-3">
+                        <p className="text-sm font-medium text-[var(--text-primary)]">{inv.invoiceNumber}</p>
+                        <p className="text-xs text-[var(--text-muted)] mt-0.5 truncate">
+                          {inv.customerSnapshot.name} · Due {formatDate(inv.dueDate)}
                         </p>
-                      )}
+                      </div>
+                      <div className="flex items-center gap-2 shrink-0">
+                        <Badge status={status} />
+                        <span className="text-sm font-semibold tabular-nums text-[var(--text-primary)]">
+                          {formatCurrency(inv.total)}
+                        </span>
+                      </div>
                     </div>
+                  );
+                })}
+              </div>
 
-                    <div className="col-span-2 flex justify-end">
-                      <Badge status={status} />
-                    </div>
-                  </div>
-                );
-              })}
             </div>
           )}
         </>

@@ -3,6 +3,7 @@ import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { ThemeProvider } from './store/theme';
 import { ToastProvider } from './components/ui/Toast';
+import { ErrorBoundary } from './components/ui/ErrorBoundary';
 import { AppShell } from './components/layout/AppShell';
 import { db, getOrCreateSettings } from './db/db';
 
@@ -48,6 +49,7 @@ function OnboardingGuard({ children }: { children: React.ReactNode }) {
 
 export default function App() {
   return (
+    <ErrorBoundary>
     <ThemeProvider>
       <ToastProvider>
         <HashRouter>
@@ -83,5 +85,6 @@ export default function App() {
         </HashRouter>
       </ToastProvider>
     </ThemeProvider>
+    </ErrorBoundary>
   );
 }

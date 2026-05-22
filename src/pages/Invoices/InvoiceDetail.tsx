@@ -87,7 +87,7 @@ export default function InvoiceDetail() {
   }
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
+    <div className="p-4 md:p-6 max-w-4xl mx-auto">
       {/* Back */}
       <button
         onClick={() => navigate('/invoices')}
@@ -97,7 +97,7 @@ export default function InvoiceDetail() {
       </button>
 
       {/* Header */}
-      <div className="flex items-start justify-between mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">
         <div>
           <div className="flex items-center gap-3 mb-1">
             <h1 className="text-2xl font-semibold text-[var(--text-primary)]">{invoice.invoiceNumber}</h1>
@@ -111,7 +111,7 @@ export default function InvoiceDetail() {
           </p>
         </div>
 
-        <div className="flex gap-2 flex-wrap justify-end">
+        <div className="flex gap-2 flex-wrap sm:justify-end">
           {/* View / Download PDF */}
           {settings && (
             <Button
@@ -154,7 +154,7 @@ export default function InvoiceDetail() {
 
       <div className="space-y-5">
         {/* ── Customer + Invoice info ── */}
-        <div className="grid grid-cols-2 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5">
           <div className="bg-[var(--bg-surface)] rounded-xl border border-[var(--border)] p-5">
             <p className="text-xs font-semibold text-[var(--text-secondary)] uppercase tracking-wide mb-3">Bill To</p>
             <p className="text-sm font-semibold text-[var(--text-primary)]">{invoice.customerSnapshot.name}</p>
