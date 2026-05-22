@@ -51,9 +51,9 @@ export function printInvoice(elementId: string, title: string): void {
     }
     #pdf-toolbar button:hover { background: rgba(255,255,255,0.1); }
     #pdf-toolbar button.primary {
-      background: #E8A020;
-      border-color: #E8A020;
-      color: #18191A;
+      background: #2D7255;
+      border-color: #2D7255;
+      color: #FFFFFF;
       font-weight: 600;
     }
     #pdf-toolbar button.primary:hover { opacity: 0.9; }

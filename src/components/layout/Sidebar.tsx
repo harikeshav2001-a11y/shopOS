@@ -17,19 +17,17 @@ function ShopOSLogo() {
   return (
     <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
       {/* Background */}
-      <rect width="32" height="32" rx="9" fill="#E8A020" />
+      <rect width="32" height="32" rx="9" fill="#2D7255" />
       {/* Awning / sign bar */}
-      <rect x="5" y="9" width="22" height="5" rx="2" fill="#18191A" />
+      <rect x="5" y="9" width="22" height="5" rx="2" fill="white" />
       {/* Building body */}
-      <rect x="6" y="14" width="20" height="12" rx="1.5" fill="#18191A" />
+      <rect x="6" y="14" width="20" height="12" rx="1.5" fill="none" stroke="white" strokeWidth="2" />
       {/* Door */}
-      <rect x="13" y="19" width="6" height="7" rx="1" fill="#E8A020" />
+      <rect x="13" y="19" width="6" height="7" rx="1" fill="white" />
       {/* Left window */}
-      <rect x="8" y="16.5" width="4" height="3.5" rx="0.75" fill="#E8A020" opacity="0.5" />
+      <rect x="8" y="16.5" width="4" height="3.5" rx="0.75" fill="white" opacity="0.55" />
       {/* Right window */}
-      <rect x="20" y="16.5" width="4" height="3.5" rx="0.75" fill="#E8A020" opacity="0.5" />
-      {/* Small awning notch */}
-      <rect x="5" y="9" width="22" height="2" rx="1" fill="#E8A020" opacity="0.3" />
+      <rect x="20" y="16.5" width="4" height="3.5" rx="0.75" fill="white" opacity="0.55" />
     </svg>
   );
 }
@@ -59,7 +57,7 @@ export function Sidebar() {
             className={({ isActive }) => cn(
               'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
               isActive
-                ? 'bg-[var(--sidebar-active)] text-[#1B3A2D] font-semibold shadow-sm'
+                ? 'bg-[var(--sidebar-active)] text-white font-semibold shadow-sm'
                 : 'text-slate-400 hover:bg-white/10 hover:text-white'
             )}
           >
@@ -85,7 +83,7 @@ export function Sidebar() {
           className={({ isActive }) => cn(
             'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
             isActive
-              ? 'bg-[var(--sidebar-active)] text-[#1B3A2D] font-semibold'
+              ? 'bg-[var(--sidebar-active)] text-white font-semibold'
               : 'text-slate-400 hover:bg-white/10 hover:text-white'
           )}
         >

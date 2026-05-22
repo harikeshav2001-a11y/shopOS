@@ -8,8 +8,8 @@ import { formatDate } from '../../utils/dates';
 const C = {
   white:       '#FFFFFF',
   bg:          '#FFFFFF',
-  accent:      '#E8A020',   // amber — invoice number, balance due
-  accentLight: '#FEF9EE',   // amber subtle
+  accent:      '#2D7255',   // medium green
+  accentLight: '#D4EDDA',   // light green subtle
   brand:       '#1B3A2D',   // dark green — INVOICE heading
   textPrimary: '#111514',
   textSecond:  '#475250',

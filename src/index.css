@@ -28,11 +28,11 @@
   --neutral:        #64748B;
   --neutral-subtle: #F0F2F2;
 
-  --accent:         #E8A020;
-  --accent-subtle:  #FEF3C7;
+  --accent:         #2D7255;
+  --accent-subtle:  #D4EDDA;
 
   --sidebar-bg:     #18191A;
-  --sidebar-active: #E8A020;
+  --sidebar-active: #2D7255;
 }
 
 .dark {
@@ -59,11 +59,11 @@
   --neutral:        #64748B;
   --neutral-subtle: #1E2020;
 
-  --accent:         #E8A020;
-  --accent-subtle:  #3D2800;
+  --accent:         #3D9E72;
+  --accent-subtle:  #1A3D28;
 
   --sidebar-bg:     #0D0E0F;
-  --sidebar-active: #E8A020;
+  --sidebar-active: #3D9E72;
 }
 
 /* ── Base ── */
