@@ -23,6 +23,8 @@ export interface Settings {
   gstNumber: string;
   defaultGstRate: number;
   defaultGstType: GstType;
+  // Expense categories
+  expenseCategories: string[];
   // App
   theme: Theme;
   onboardingComplete: boolean;

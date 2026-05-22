@@ -43,6 +43,7 @@ export const DEFAULT_SETTINGS: Omit<Settings, 'id'> = {
   gstNumber: '',
   defaultGstRate: 18,
   defaultGstType: 'CGST_SGST',
+  expenseCategories: ['Materials', 'Rent', 'Utilities', 'Tools', 'Other'],
   theme: 'system',
   onboardingComplete: false,
   createdAt: new Date(),
